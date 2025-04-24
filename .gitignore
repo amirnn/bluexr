@@ -5,3 +5,6 @@
 /build/
 /out/
 /.cache/
+
+# artifacts
+compile_commands.json
