@@ -1,42 +1,58 @@
 {
-    "version": 7,
+    "version": 10,
     "cmakeMinimumRequired": {
         "major": 4,
-        "minor": 0,
+        "minor": 1,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "meta-quest-3",
-            "displayName": "meta-quest-3",
+            "name": "default",
             "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/out/build",
             "installDir": "${sourceDir}/out/install",
-            "toolchainFile": "${env:ANDROID_NDK_PATH}/build/cmake/android-legacy.toolchain.cmake",
+            "hidden": true,
             "cacheVariables": {
-                "ANDROID_ABI": "arm64-v8a",
-                "ANDROID_STL": "c++_static",
-                "ANDROID_PLATFORM": "32",
                 // C++ standard related
                 "CMAKE_CXX_STANDARD": "23",
                 "CMAKE_CXX_STANDARD_REQUIRED": "ON",
                 "CMAKE_CXX_EXTENSIONS": "ON",
+                // C standard related
+                "CMAKE_C_STANDARD": "17",
+                "CMAKE_C_STANDARD_REQUIRED": "ON",
                 // compile related
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "android-arm64-v8a",
+            "displayName": "android-arm64-v8a",
+            "$comment": "Configure for Android arm64-v8a i.e. Meta Quest 3",
+            "inherits": "default",
+            "toolchainFile": "$env{ANDROID_NDK_PATH}/build/cmake/android-legacy.toolchain.cmake",
+            "cacheVariables": {
+                "ANDROID_SDK_PATH": "$env{ANDROID_SDK_PATH}",
+                "ANDROID_SDK_ROOT": "$env{ANDROID_SDK_PATH}",
+                "ANDROID_ABI": "arm64-v8a",
+                "ANDROID_STL": "c++_static",
+                "ANDROID_PLATFORM": "34",
+                "BUILD_TOOLS": "36.0.0",
+                "CMAKE_SYSTEM_NAME": "Android"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "release",
-            "displayName": "release",
-            "configurePreset": "meta-quest-3",
+            "name": "release-android-arm64-v8a",
+            "displayName": "release-android-arm64-v8a",
+            "$comment": "Build for Android i.e. Meta Quest 3",
+            "configurePreset": "android-arm64-v8a",
             "configuration": "Release"
         },
         {
-            "name": "release-with-deb-info",
-            "displayName": "release-with-deb-info",
-            "configurePreset": "meta-quest-3",
+            "name": "release-with-deb-info-android-arm64-v8a",
+            "displayName": "RDI-android-arm64-v8a",
+            "configurePreset": "android-arm64-v8a",
             "configuration": "RelWithDebInfo"
         }
     ]
